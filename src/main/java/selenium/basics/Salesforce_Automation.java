@@ -1,5 +1,6 @@
 package selenium.basics;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -7,36 +8,50 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+
+import static selenium.basics.Individuals.Individual_CreateAccount;
+import static selenium.basics.WorkForceType.WorkForceType_CreateAccount;
+import static selenium.basics.WorkForceType.WorkForceType_EditAccount;
+import static selenium.basics.WorkForceType.WorkForceType_DeleteAccount;
+import static selenium.basics.WorkForceType.WorkForceType_CreateAccount_WithoutMandatoryFields;
+import static selenium.basics.WorkForceType.WorkForceType_ValidateAscendingOrder;
+import static selenium.basics.Common.viewAllApps;
+import static selenium.basics.Common.searchSpecificApp;
+import static selenium.basics.Common.launchChrome;
+
 public class Salesforce_Automation {
-
-
 	static ChromeDriver driver;
 
+	static String userName="vijoy@sdet.com";
+	static String password="Salesforce@567";
+
 	public static void main(String[] args) throws InterruptedException {
-		
-		ChromeOptions options = new ChromeOptions();
 
-		//Add chrome switch to disable notification - "**--disable-notifications**"
-		options.addArguments("--disable-notifications");
-
-		driver = new ChromeDriver(options);
-
-		Salesforce_Login();
-		
 		try
+
 		{
 
-		Salesforce_CreateAccount();
+			WTG_TC001();
+
+			WTG_TC002();
+
+			WTG_TC003();
+
+			WTG_TC004();
+			WTG_TC005();
+
 		}
-//		catch(Exception e)
-//		{
-//			
-//		}
+		catch(Exception e)
+		{
+			System.out.println("EXCEPTION THROWN IN SCRIPT... Check the below error");
+			System.out.println(e.getMessage());
+		}
 		finally
 		{
 		
-		Thread.sleep(5000);
-		driver.quit();
+		Thread.sleep(3000);
+//		driver.quit();
+// 		setTimeout(function(){debugger;},5000);
 		}
 
 
@@ -52,9 +67,9 @@ public class Salesforce_Automation {
 		driver.get("https://login.salesforce.com/");
 
 		//sendkeys() method pass values in textbox
-		driver.findElement(By.id("username")).sendKeys("hari.radhakrishnan@qeagle.com");
+		driver.findElement(By.id("username")).sendKeys(userName);
 
-		driver.findElement(By.id("password")).sendKeys("Leaf$1234");
+		driver.findElement(By.id("password")).sendKeys(password);
 
 		driver.findElement(By.id("Login")).click();
 
@@ -63,29 +78,79 @@ public class Salesforce_Automation {
 		
 	}
 
-	public static void Salesforce_CreateAccount()
-	{
+	public static void WTG_TC001() throws InterruptedException {
 
-		driver.findElement(By.className("slds-icon-waffle")).click();
+		launchChrome();
 
-		driver.findElement(By.xpath("//button[text()='View All']")).click();
+		Salesforce_Login();
 
-		driver.findElement(By.xpath("//p[text()='Sales']")).click();
+		viewAllApps();
 
+		searchSpecificApp("Work Type Groups");
 
-		WebElement account = driver.findElement(By.xpath("//span[text()='Accounts']"));
-		driver.executeScript("arguments[0].click();", account);
-		
-		driver.findElement(By.xpath("//div[@title='New']")).click();
-		
-		WebElement accountName = driver.findElement(By.xpath("//input[@name='Name']"));
-		driver.executeScript("arguments[0].click();", accountName);
-		
-		driver.findElement(By.xpath("//input[@name='Name']")).sendKeys("TestLeaf User");
-		
-		driver.findElement(By.xpath("//button[text()='Save']")).click();
+		WorkForceType_CreateAccount();
 
-		System.out.println("Create Account is successful in Salesforce");
-
+		driver.quit();
 	}
+
+	public static void WTG_TC002() throws InterruptedException {
+		launchChrome();
+
+		Salesforce_Login();
+
+		viewAllApps();
+
+		searchSpecificApp("Work Type Groups");
+
+		WorkForceType_EditAccount();
+
+		driver.quit();
+	}
+
+	public static void WTG_TC003() throws InterruptedException {
+		launchChrome();
+
+		Salesforce_Login();
+
+		viewAllApps();
+
+		searchSpecificApp("Work Type Groups");
+
+		WorkForceType_DeleteAccount();
+
+		driver.quit();
+	}
+
+	public static void WTG_TC004() throws InterruptedException {
+
+		launchChrome();
+
+		Salesforce_Login();
+
+		viewAllApps();
+
+		searchSpecificApp("Work Type Groups");
+
+		WorkForceType_CreateAccount_WithoutMandatoryFields();
+
+		driver.quit();
+	}
+
+	public static void WTG_TC005() throws InterruptedException {
+
+		launchChrome();
+
+		Salesforce_Login();
+
+		viewAllApps();
+
+		searchSpecificApp("Work Type Groups");
+
+		WorkForceType_ValidateAscendingOrder();
+
+		driver.quit();
+	}
+
+
+
 }
